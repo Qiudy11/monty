@@ -15,15 +15,13 @@ void run(cmd_t *cmd)
 		{"add", add},
 		{"nop", nop},
 		{"sub", sub},
-		{"div", divide},
+		{"divide", divide},
 		{"mul", mul},
 		{"mod", mod},
 		{"pchar", pchar},
 		{"pstr", pstr},
 		{"rotl", rotl},
 		{"rotr", rotr},
-		{"stack", stack_mode},
-		{"queue", queue_mode},
 		{NULL, NULL}
 	};
 	int i = 0;
@@ -38,6 +36,6 @@ void run(cmd_t *cmd)
 		i++;
 	}
 
-	printf("L%d: unknown instruction %s\n", cmd->line_number, cmd->op);
+	printf("L%d: unknown instruction <opcode>\n", cmd->line_number);
 	exit(EXIT_FAILURE);
 }
