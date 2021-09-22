@@ -20,4 +20,3 @@ void eval(char *line, stack_t **h, stack_t **t, int *mode, unsigned int ln)
 	if (parse(line, &cmd))
 		run(&cmd);
 }
-
