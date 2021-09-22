@@ -37,8 +37,5 @@ int main(int argc, char **argv)
 		line_number++;
 	}
 
-	fclose(fd);
-	free(line);
-	free_list(&head);
 	return (EXIT_SUCCESS);
 }
