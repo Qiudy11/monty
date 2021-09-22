@@ -13,7 +13,7 @@ void add(cmd_t *cmd)
 	stack_t *node_2 = NULL;
 	int sum = 0;
 
-	if (cmd == NULL || h == NULL || *h == NULL || (*h)->next == NULL)
+	if (*h == NULL || h == NULL || (*h)->next == NULL)
 	{
 		printf("L%d: can't add, stack too short\n", cmd->line_number);
 		exit(EXIT_FAILURE);
@@ -77,15 +77,14 @@ void divide(cmd_t *cmd)
 		exit(EXIT_FAILURE);
 	}
 
-	node_1 = *h;
-	node_2 = (*h)->next;
-
 	if (node_1->n == 0)
 	{
 		printf("L%d: division by zero\n", cmd->line_number);
 		exit(EXIT_FAILURE);
 	}
 
+	node_1 = *h;
+	node_2 = (*h)->next;
 	quotient = node_2->n / node_1->n;
 	node_2->n = quotient;
 	pop(cmd);
@@ -103,7 +102,7 @@ void mul(cmd_t *cmd)
 	stack_t **h = cmd->head;
 	stack_t *node_1 = NULL;
 	stack_t *node_2 = NULL;
-	int product;
+	int product = 0;
 
 	if (h == NULL || *h == NULL || (*h)->next == NULL)
 	{
@@ -132,7 +131,7 @@ void mod(cmd_t *cmd)
 	stack_t **h = cmd->head;
 	stack_t *node_1 = NULL;
 	stack_t *node_2 = NULL;
-	int rem;
+	int rem = 0;
 
 	if (h == NULL || *h == NULL || (*h)->next == NULL)
 	{
@@ -140,18 +139,17 @@ void mod(cmd_t *cmd)
 		exit(EXIT_FAILURE);
 	}
 
-	node_1 = *h;
-	node_2 = (*h)->next;
-
 	if (node_1->n == 0)
 	{
 		printf("L%d: division by zero\n", cmd->line_number);
 		exit(EXIT_FAILURE);
 	}
 
+	node_1 = *h;
+	node_2 = (*h)->next;
+
 	rem = node_2->n % node_1->n;
 	node_2->n = rem;
 
 	pop(cmd);
 }
-
