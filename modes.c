@@ -21,4 +21,3 @@ void queue_mode(cmd_t *cmd)
 {
 	*cmd->mode = 1;
 }
-
