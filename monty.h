@@ -76,8 +76,4 @@ void pchar(cmd_t *cmd);
 void pstr(cmd_t *cmd);
 void rotl(cmd_t *cmd);
 void rotr(cmd_t *cmd);
-void free_list(stack_t **head);
-void stack_mode(cmd_t *cmd);
-void queue_mode(cmd_t *cmd);
 #endif /*MONTY_H*/
-
