@@ -44,15 +44,12 @@ int parse(char *line, cmd_t *cmd)
 		}
 		siz = strlen(arg);
 		while (siz--)
-		{
-			if (siz == 0 && arg[siz] == '-')
-				break;
 			if (arg[siz] > 57 || arg[siz] < 48)
 			{
+				printf("index: %d, ascii: %d\n", siz, arg[siz]);
 				printf("L%d: usage: push integer\n", ln);
 				exit(EXIT_FAILURE);
 			}
-		}
 		cmd->arg = atoi(arg);
 		cmd->op = op;
 		return (1);
@@ -61,4 +58,3 @@ int parse(char *line, cmd_t *cmd)
 
 	return (1);
 }
-
