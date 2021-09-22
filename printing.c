@@ -99,4 +99,3 @@ void nop(cmd_t *cmd)
 {
 	(void)cmd;
 }
-
