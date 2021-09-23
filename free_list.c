@@ -1,25 +1,29 @@
 #include "monty.h"
+glo_t glo;
+/**
+ * free_buff - frees buffers from main
+ * Return: nothing
+ */
+void free_buff(void)
+{
+	free(glo.bigb);
+	fclose(glo.fp);
+}
 
 /**
- * free_list - free's a stack
- * @head: pointer to head
+ * free_stack - frees a list
+ * @head: pointer to head of the list
+ * Return: nothing
  */
-void free_list(stack_t **head)
+
+void free_stack(stack_t *head)
 {
-	stack_t *runner;
-	stack_t *tmp;
+	stack_t *temp;
 
-	if (*head)
+	while (head)
 	{
-		runner = *head;
-		*head = NULL;
-
-		while (runner->next)
-		{
-			tmp = runner;
-			runner = runner->next;
-			free(tmp);
-		}
-		free(runner);
+		temp = head->next;
+		free(head);
+		head = temp;
 	}
 }
