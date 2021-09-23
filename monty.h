@@ -1,14 +1,10 @@
-#ifndef MONTY_H
-#define MONTY_H
+#ifndef __MONTY__H__
+#define __MONTY__H__
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <limits.h>
 #include <string.h>
-
+#include <ctype.h>
+#include <unistd.h>
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
@@ -26,26 +22,7 @@ typedef struct stack_s
 } stack_t;
 
 /**
- * struct cmd_s - command struct
- * @op: name of operation
- * @arg: argument for function
- * @mode: stack or queue mode
- * @line_number: number of line being evaluated
- * @head: head of linked list
- * @tail: tail of linked list
- */
-typedef struct cmd_s
-{
-	char *op;
-	int arg;
-	int *mode;
-	unsigned int line_number;
-	stack_t **head;
-	stack_t **tail;
-} cmd_t;
-
-/**
- * struct instruction_s - opcoode and its function
+ * struct instruction_s - opcode and its function
  * @opcode: the opcode
  * @f: function to handle the opcode
  *
@@ -55,28 +32,66 @@ typedef struct cmd_s
 typedef struct instruction_s
 {
 	char *opcode;
-	void (*f)(cmd_t *cmd);
+	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-void eval(char *line, stack_t **h, stack_t **t, int *mode, unsigned int ln);
-int parse(char *line, cmd_t *cmd);
-void run(cmd_t *cmd);
-void push(cmd_t *cmd);
-void pall(cmd_t *cmd);
-void pint(cmd_t *cmd);
-void pop(cmd_t *cmd);
-void swap(cmd_t *cmd);
-void add(cmd_t *cmd);
-void nop(cmd_t *cmd);
-void sub(cmd_t *cmd);
-void divide(cmd_t *cmd);
-void mul(cmd_t *cmd);
-void mod(cmd_t *cmd);
-void pchar(cmd_t *cmd);
-void pstr(cmd_t *cmd);
-void rotl(cmd_t *cmd);
-void rotr(cmd_t *cmd);
-void free_list(stack_t **head);
-void stack_mode(cmd_t *cmd);
-void queue_mode(cmd_t *cmd);
-#endif /*MONTY_H*/
+/* global variable */
+/**
+ * struct glo_s - global variable
+ * @fp: The file we open and read
+ * @line_buff: the buffer that holds the command for each line
+ * @bigb: the array of strings that holds the command
+ * @node_data: The integer to use for data in a given node if necessary
+ * Description: Allows us to pass variables across our code
+ */
+typedef struct glo_s
+{
+	FILE *fp;
+	char *line_buff;
+	char *bigb;
+	int node_data;
+} glo_t;
+extern glo_t glo;
+
+/* Parse line and error functions */
+char *parse_line(unsigned int c, stack_t *head);
+void integer_error(unsigned int c, stack_t *head);
+void pint_error(unsigned int c);
+void pop_error(stack_t **stack, unsigned int c);
+void add_error(unsigned int c);
+
+/* More error functions */
+void sub_error(unsigned int c);
+void div_error(unsigned int c);
+void mul_error(unsigned int c);
+void mod_error(unsigned int c);
+
+/* Checks and executes given commands */
+int get_opcode(stack_t **stack, unsigned int line_number);
+void op_push(stack_t **stack, unsigned int line_number);
+void op_pall(stack_t **stack, unsigned int line_number);
+void op_pint(stack_t **stack, unsigned int line_number);
+void op_pop(stack_t **stack, unsigned int line_number);
+void op_add(stack_t **stack, unsigned int line_number);
+void op_swap(stack_t **stack, unsigned int line_number);
+void op_nop(stack_t **stack, unsigned int line_number);
+void op_sub(stack_t **stack, unsigned int line_number);
+void op_div(stack_t **stack, unsigned int line_number);
+void op_mul(stack_t **stack, unsigned int line_number);
+void op_mod(stack_t **stack, unsigned int line_number);
+void op_pchar(stack_t **stack, unsigned int line_number);
+void op_pstr(stack_t **stack, unsigned int line_number);
+void op_rotl(stack_t **stack, unsigned int line_number);
+void op_rotr(stack_t **stack, unsigned int line_number);
+
+/* Conditional statements to check for failure */
+void argc_check(int argc);
+void open_check(char **argv);
+void line_check(ssize_t lines);
+void op_check(int check, unsigned int c, stack_t *head);
+void op_check_print_error(unsigned int c);
+
+/* Freeing functions */
+void free_buff(void);
+void free_stack(stack_t *head);
+#endif
