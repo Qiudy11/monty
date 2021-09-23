@@ -1,44 +1,46 @@
 #include "monty.h"
-
+glo_t glo;
 /**
- * main - entry point
- * @argc: number of args
- * @argv: filenames
- * Return: 0 or 1
- */
+* main - reads a monty file and executes line by line
+* @argc: argument counter
+* @argv: argument vector
+* Return: 0
+*/
+
 int main(int argc, char **argv)
 {
-	FILE *fd;
-	char *line;
-	size_t len = 0;
-	ssize_t read;
 	stack_t *head = NULL;
-	stack_t *tail = NULL;
-	int mode = 0;
-	unsigned int line_number = 1;
+	ssize_t lines;
+	int check;
+	size_t buff_size = 0;
+	unsigned int counter = 0;
 
-	if (argc != 2)
+	glo.line_buff = NULL;
+	glo.bigb = NULL;
+
+	argc_check(argc);
+
+	glo.fp = fopen(argv[1], "r");
+	open_check(argv);
+
+	lines = getline(&glo.line_buff, &buff_size, glo.fp);
+	line_check(lines);
+
+	while (lines >= 0)
 	{
-		printf("USAGE: monty file\n");
-		exit(EXIT_FAILURE);
+		glo.bigb = NULL;
+		counter++;
+		glo.bigb = parse_line(counter, head);
+		if (glo.bigb == NULL)
+		{
+			lines = getline(&glo.line_buff, &buff_size, glo.fp);
+			continue;
+		}
+		check = get_opcode(&head, counter);
+		op_check(check, counter, head);
+		lines = getline(&glo.line_buff, &buff_size, glo.fp);
 	}
-
-	fd = fopen(argv[1], "r");
-
-	if (fd == NULL)
-	{
-		printf("Error: Can't open file %s\n", argv[1]);
-		exit(EXIT_FAILURE);
-	}
-
-	while ((read = getline(&line, &len, fd)) != -1)
-	{
-		eval(line, &head, &tail, &mode, line_number);
-		line_number++;
-	}
-
-	fclose(fd);
-	free(line);
-	free_list(&head);
-	return (EXIT_SUCCESS);
+	free_buff();
+	free_stack(head);
+	return (0);
 }
